@@ -4,15 +4,10 @@
 
 import Foundation
 
-public protocol Cockpit {
+private protocol CockpitProtocol {
     
     /// The associated item type to be stored in the cache.
     associatedtype T: Any
-    
-    /// The internally managed cache.
-    ///
-    /// Do not perform any explicit writes to this cache. Instead utilize the `set(object: T, forKey key: String)` method.
-    var storage: NSCache<NSString, CockpitContainer<T>> { get }
     
     /// The method used to store an object in the cache with a given key.
     /// - Parameter object: The object to be cached.
@@ -25,14 +20,22 @@ public protocol Cockpit {
     func object(forKey key: String) -> T?
 }
 
-// MARK: - Default Implementation
-extension Cockpit {
-    public func set(object: T, forKey key: String) {        
-        storage.setObject(CockpitContainer(object), forKey: key as NSString)
+public class Cockpit<T: Any> {
+    
+    /// The internally managed cache.
+    ///
+    /// Do not perform any explicit writes to this cache. Instead utilize the `set(object: T, forKey key: String)` method.
+    private let cache = NSCache<NSString, CockpitContainer<T>>()
+}
+
+// MARK: - CockpitProtocol Conformance
+extension Cockpit: CockpitProtocol {
+    public func set(object: T, forKey key: String) {
+        cache.setObject(CockpitContainer(object), forKey: key as NSString)
     }
     
     public func object(forKey key: String) -> T? {
-        guard let container = storage.object(forKey: key as NSString) else {
+        guard let container = cache.object(forKey: key as NSString) else {
             return nil
         }
         
