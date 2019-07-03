@@ -2,7 +2,7 @@
 //  Created by Christian Ampe on 6/24/19.
 //
 
-import Foundation
+import Foundation.NSCache
 
 private protocol CockpitProtocol {
     
@@ -20,7 +20,7 @@ private protocol CockpitProtocol {
     func object(forKey key: String) -> T?
 }
 
-public class Cockpit<T: Any> {
+public struct Cockpit<T: Any> {
     
     /// The internally managed cache.
     ///

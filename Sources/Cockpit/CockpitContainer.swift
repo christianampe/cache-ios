@@ -2,7 +2,7 @@
 //  Created by Christian Ampe on 6/24/19.
 //
 
-public class CockpitContainer<T: Any> {
+class CockpitContainer<T: Any> {
     
     /// The internally managed generic object.
     let object: T
